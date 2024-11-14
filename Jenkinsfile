@@ -1,16 +1,20 @@
 pipeline {
-    agent any
-
+    agent {
+        docker { image 'golang:1.18' } // Use the official Golang Docker image
+    }
     environment {
         GO_VERSION = '1.18' // Set the Go version if needed
         GOPATH = '/go' // Define Go workspace path
+        DOCKER_IMAGE = 'rohit/employee-app' // Docker image name (you can update this)
+        DOCKER_REGISTRY = 'docker.io' // Docker registry, e.g., Docker Hub (can be a private registry too)
+        GITHUB_REPO = 'https://github.com/rohitdevops05112024/OT-Microservices.git' // GitHub repo URL
+        BRANCH = 'rohit_test' // Branch to checkout
     }
-
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from GitHub
-                git branch: 'rohit_test', url: 'https://github.com/rohitdevops05112024/OT-Microservices.git'
+                // Checkout the code from GitHub repository
+                git branch: "${BRANCH}", url: "${GITHUB_REPO}"
             }
         }
 
@@ -42,25 +46,19 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            when {
-                branch 'rohit_test' // Only build Docker image on this branch
-            }
             steps {
                 script {
-                    // Build the Docker image
-                    sh 'docker build -t rohit/employee-app ./employee'
+                    // Build the Docker image using the Dockerfile located in the employee directory
+                    sh 'docker build -t ${DOCKER_IMAGE} ./employee'
                 }
             }
         }
 
         stage('Publish Docker Image') {
-            when {
-                branch 'rohit_test' // Only push Docker image to the registry on this branch
-            }
             steps {
                 script {
-                    // Publish the Docker image to Docker Hub or your private registry
-                    sh 'docker push rohit/employee-app'
+                    // Push the Docker image to the specified Docker registry (e.g., Docker Hub)
+                    sh 'docker push ${DOCKER_IMAGE}'
                 }
             }
         }
@@ -68,17 +66,16 @@ pipeline {
         stage('Clean Up') {
             steps {
                 script {
-                    // Remove the built binaries and Docker images to keep the workspace clean
+                    // Clean up generated binaries and Docker images
                     sh 'rm -rf employee-app'
-                    sh 'docker rmi rohit/employee-app'
+                    sh 'docker rmi ${DOCKER_IMAGE}'
                 }
             }
         }
     }
-
     post {
         always {
-            // Actions to be taken after the pipeline execution
+            // Actions to be taken after the pipeline execution, such as cleaning the workspace
             cleanWs() // Clean up the workspace
         }
         success {
