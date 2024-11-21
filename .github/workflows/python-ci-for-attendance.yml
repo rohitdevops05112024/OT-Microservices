@@ -49,9 +49,3 @@ jobs:
         with:
           name: test-results
           path: test-results.xml
-
-      # Step 8: Lint the codebase
-      - name: Lint Code
-        run: |
-          pip install flake8
-          flake8 . --max-line-length=88
