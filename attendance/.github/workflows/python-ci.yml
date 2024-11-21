@@ -1,7 +1,7 @@
 name: Python CI for Attendance
 
-on: 
-  workflow_dispatch:  # Triggered by the root-level workflow
+on:
+  workflow_dispatch:  # This workflow is triggered by the root workflow
 
 jobs:
   build-and-test:
