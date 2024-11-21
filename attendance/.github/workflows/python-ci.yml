@@ -1,10 +1,6 @@
 name: Python CI for Attendance
 
-on:
-  workflow_run:
-    workflows: ["Trigger Attendance CI Workflow"]  # Listen to the root-level workflow trigger
-    types:
-      - completed  # Trigger only when the root-level workflow completes
+on: workflow_dispatch  # Triggered by the root-level workflow
 
 jobs:
   build-and-test:
@@ -23,27 +19,24 @@ jobs:
 
       # Step 3: Install dependencies
       - name: Install Dependencies
-        working-directory: attendance
         run: |
           python -m pip install --upgrade pip
-          pip install -r attendance/requirements.txt
+          pip install -r requirements.txt
 
       # Step 4: Run tests
       - name: Run Tests
-        working-directory: attendance
         run: |
-          pytest attendance/test_attendance_api.py --junitxml=attendance/test-results.xml
+          pytest test_attendance_api.py --junitxml=test-results.xml
 
       # Step 5: Archive test results
       - name: Archive Test Results
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: attendance/test-results.xml
+          path: test-results.xml
 
-      # Step 6: Lint the code
+      # Step 6: Lint the codebase
       - name: Lint Code
-        working-directory: attendance
         run: |
           pip install flake8
-          flake8 attendance --max-line-length=88
+          flake8 . --max-line-length=88
