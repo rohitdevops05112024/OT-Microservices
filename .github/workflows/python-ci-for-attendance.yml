@@ -34,15 +34,14 @@ jobs:
             echo "config.yaml found in attendance/"
           fi
 
-      # Step 5: Set the correct working directory for pytest
-      - name: Set Working Directory
-        run: |
-          cd attendance  # Change to the 'attendance' directory where the tests and config.yaml are
+      # Step 5: Set the correct environment variable for the config file
+      - name: Set CONFIG_FILE environment variable
+        run: echo "CONFIG_FILE=attendance/config.yaml" >> $GITHUB_ENV
 
       # Step 6: Run tests
       - name: Run Tests
         run: |
-          pytest test_attendance_api.py --junitxml=test-results.xml  # Run tests
+          pytest attendance/test_attendance_api.py --junitxml=test-results.xml  # Run tests
 
       # Step 7: Archive test results
       - name: Archive Test Results
