@@ -27,7 +27,7 @@ jobs:
       # Step 4: Run tests
       - name: Run Tests
         run: |
-          pytest test_attendance_api.py --junitxml=test-results.xml
+          pytest attendance/test_attendance_api.py --junitxml=test-results.xml
 
       # Step 5: Archive test results
       - name: Archive Test Results
