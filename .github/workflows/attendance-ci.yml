@@ -19,15 +19,15 @@ jobs:
       # Step 2: Trigger the nested workflow via API
       - name: Dispatch Nested Workflow
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Or use your personal access token
         run: |
-          WORKFLOW_FILE="Python CI for Attendance.yml"
-          REPO_OWNER=$(echo "${{ github.repository }}" | cut -d'/' -f1)
-          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
+          WORKFLOW_FILE="python-ci.yml"  # Ensure this matches the exact workflow file name
+          REPO_OWNER="rohitdevops05112024"  # Fixed GitHub username
+          REPO_NAME="OT-Microservices"  # Fixed repository name
 
-          # Trigger the workflow_dispatch event
+          # Trigger the workflow_dispatch event via API
           curl -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/workflows/"$WORKFLOW_FILE"/dispatches \
-            -d '{"ref":"master"}'
+            https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/workflows/$WORKFLOW_FILE/dispatches \
+            -d "{\"ref\":\"master\"}"
