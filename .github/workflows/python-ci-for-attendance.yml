@@ -27,11 +27,11 @@ jobs:
       # Step 4: Verify the config.yaml file exists and is in the correct location
       - name: Check for config.yaml
         run: |
-          if [ ! -f "attendance/config/config.yaml" ]; then
-            echo "Error: config.yaml not found in attendance/config/"
+          if [ ! -f "attendance/config.yaml" ]; then
+            echo "Error: config.yaml not found in attendance/"
             exit 1
           else
-            echo "config.yaml found in attendance/config/"
+            echo "config.yaml found in attendance/"
           fi
 
       # Step 5: Run tests
