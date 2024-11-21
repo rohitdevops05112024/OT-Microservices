@@ -3,7 +3,7 @@ name: Attendance Folder CI
 on:
   push:
     branches:
-      - master
+      - master    # Trigger when changes are pushed to the master branch
     paths:
       - 'attendance/**'  # Trigger only when files in the attendance folder change
 
@@ -16,10 +16,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Trigger the nested workflow via API
+      # Step 2: Trigger the nested Python workflow using GitHub API
       - name: Dispatch Nested Workflow
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token provided by GitHub Actions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
         run: |
           WORKFLOW_FILE="python-ci-for-attendance.yml"  # Nested workflow file name
           REPO_OWNER="rohitdevops05112024"  # Your GitHub username
@@ -30,4 +30,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/actions/workflows/$WORKFLOW_FILE/dispatches \
-            -d "{\"ref\":\"master\"}"
+            -d "{\"ref\":\"master\"}"  # Change 'master' to 'main' if your default branch is 'main'
