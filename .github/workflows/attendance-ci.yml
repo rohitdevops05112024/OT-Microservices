@@ -1,4 +1,4 @@
-name: Trigger Attendance CI Workflow
+name: Attendance Folder CI
 
 on:
   push:
@@ -8,19 +8,17 @@ on:
       - 'attendance/**'  # Trigger only when files in the attendance folder change
 
 jobs:
-  trigger:
+  trigger-attendance-workflow:
     runs-on: ubuntu-latest
 
     steps:
       # Step 1: Checkout the repository
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Trigger the second workflow directly via workflow_run event
-      - name: Trigger Attendance Build Workflow
-        uses: peter-evans/workflow-dispatch@v1
+      # Step 2: Dispatch Attendance Workflow
+      - name: Dispatch Nested Attendance Workflow
+        uses: peter-evans/workflow-dispatch@v2
         with:
-          workflow: "python-ci.yml"    # The workflow file to trigger in the attendance folder
-          ref: "refs/heads/master"     # Branch to trigger the workflow for
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          workflow: Python CI for Attendance
+          ref: master
